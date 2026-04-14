@@ -134,6 +134,44 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-heigh
 .dact.del:hover{background:#ffe0e0;}
 .empty-st{text-align:center;padding:18px 10px;color:#7a9abf;font-size:10px;}
 .empty-st svg{width:30px;fill:#b0c4f0;margin:0 auto 8px;display:block;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
+.ab-sm{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:9px 6px;cursor:pointer;text-align:center;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.ab-sm:hover{background:#f0f5ff;border-color:#4a6abf;}
+.ab-sm:active{transform:scale(.96);}
+.ab-sm.off{opacity:.35;cursor:not-allowed;}
+.ab-sm.special{border-color:#2d4a9e;background:#e8f0ff;}
+.ab-sm-icon{font-size:15px;}
+.ab-sm-text{font-size:9px;color:#1a2a5e;font-weight:700;line-height:1.3;text-align:center;}
+.ab-sm.special .ab-sm-text{color:#1a2a5e;}
+.fc-wrap{display:flex;flex-direction:column;gap:0;}
+.fc-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.fc-counter{font-size:10px;color:#5a7abf;font-weight:700;}
+.fc-arrows{display:flex;gap:6px;}
+.fc-btn{background:#fff;border:.5px solid #b8ccf0;border-radius:8px;padding:4px 10px;font-size:10px;color:#1a2a5e;cursor:pointer;font-weight:700;}
+.fc-btn:hover{background:#f0f5ff;}
+.fc-card{background:#fff;border:.5px solid #b8ccf0;border-radius:12px;padding:14px;margin-bottom:8px;cursor:pointer;min-height:90px;}
+.fc-tag{font-size:8px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.fc-q{font-size:11px;color:#1a2a5e;font-weight:700;line-height:1.45;}
+.fc-hint{font-size:8px;color:#7a9abf;margin-top:6px;}
+.fc-a{display:none;font-size:10px;color:#fff;font-weight:600;line-height:1.45;background:#1a2a5e;border-radius:8px;padding:8px;margin-top:8px;}
+.fc-a.show{display:block;}
+.qz-item{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:10px 11px;margin-bottom:7px;}
+.qz-q{font-size:11px;color:#1a2a5e;font-weight:700;margin-bottom:7px;line-height:1.4;}
+.qz-opt{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:7px;cursor:pointer;transition:background .15s;margin-bottom:3px;}
+.qz-opt:last-child{margin-bottom:0;}
+.qz-opt:hover:not(.locked){background:#f0f5ff;}
+.qz-opt.correct{background:#e0f5e8;border:.5px solid #60c080;}
+.qz-opt.wrong{background:#ffe0e0;border:.5px solid #e06060;}
+.qz-opt.correct .qz-letter{background:#60c080;color:#fff;}
+.qz-opt.wrong .qz-letter{background:#e06060;color:#fff;}
+.qz-letter{width:18px;height:18px;border-radius:50%;background:#d4e2ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#2d4a9e;flex-shrink:0;}
+.qz-text{font-size:10px;color:#1a2a5e;font-weight:500;}
+.qz-score{background:#1a2a5e;color:#fff;border-radius:10px;padding:10px;text-align:center;margin-bottom:8px;}
+.qz-score-num{font-size:22px;font-weight:700;color:#5b8dee;}
+.qz-score-lbl{font-size:10px;color:#93b4e8;margin-top:2px;}
+.gen-btn{width:100%;background:#1a2a5e;color:#fff;border:none;border-radius:10px;padding:9px;font-size:10px;font-weight:700;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .2s;}
+.gen-btn:hover{opacity:.88;}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed;}
 .search-bar{background:#fff;border:.5px solid #b8ccf0;border-radius:22px;display:flex;align-items:center;padding:8px 13px;gap:7px;margin-bottom:11px;}
 .search-bar input{border:none;flex:1;outline:none;font-size:10px;color:#1a2a5e;background:transparent;}
 .search-bar input::placeholder{color:#7a9abf;}
@@ -272,18 +310,67 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-heigh
         <div class="stat-card"><div class="stat-num" id="st-pags">0</div><div class="stat-lbl">Págs. est.</div></div>
       </div>
     </div>
-    <div class="slabel">Análisis rápido</div>
-    <div class="analysis-grid">
-      <button class="ab off" id="ab1" onclick="runAn('cláusulas abusivas','Detectando cláusulas abusivas...')"><div class="ab-icon">🔍</div><div class="ab-text">Detectar cláusulas abusivas</div></button>
-      <button class="ab off" id="ab2" onclick="runAn('fechas límite y plazos','Extrayendo fechas y plazos...')"><div class="ab-icon">📅</div><div class="ab-text">Extraer fechas y plazos</div></button>
-      <button class="ab off" id="ab3" onclick="runAn('resumen ejecutivo legal','Generando resumen...')"><div class="ab-icon">⚖️</div><div class="ab-text">Resumen ejecutivo</div></button>
-      <button class="ab off" id="ab4" onclick="runAn('riesgos legales','Analizando riesgos...')"><div class="ab-icon">🚩</div><div class="ab-text">Riesgos legales</div></button>
+    <div class="slabel">Análisis legal</div>
+    <div class="grid3">
+      <button class="ab-sm off" id="ab1" onclick="runAn('errores jurídicos en el documento','Detectando errores jurídicos...')"><div class="ab-sm-icon">⚠️</div><div class="ab-sm-text">Errores jurídicos</div></button>
+      <button class="ab-sm off" id="ab2" onclick="runAn('fechas límite, plazos y vencimientos','Extrayendo fechas y plazos...')"><div class="ab-sm-icon">📅</div><div class="ab-sm-text">Fechas y plazos</div></button>
+      <button class="ab-sm off" id="ab3" onclick="runAn('resumen ejecutivo legal','Generando resumen ejecutivo...')"><div class="ab-sm-icon">⚖️</div><div class="ab-sm-text">Resumen</div></button>
+      <button class="ab-sm off" id="ab4" onclick="runAn('riesgos legales y recomendaciones','Analizando riesgos legales...')"><div class="ab-sm-icon">🚩</div><div class="ab-sm-text">Riesgos legales</div></button>
+      <button class="ab-sm off special" id="ab5" onclick="goTo('s-docs','s-flash')"><div class="ab-sm-icon">🃏</div><div class="ab-sm-text">Flashcards</div></button>
+      <button class="ab-sm off special" id="ab6" onclick="goTo('s-docs','s-quiz')"><div class="ab-sm-icon">📝</div><div class="ab-sm-text">Cuestionario</div></button>
     </div>
     <div class="slabel" id="docs-lbl" style="display:none">Documentos cargados</div>
     <div class="doc-list" id="doc-list"></div>
     <div class="empty-st" id="empty-st"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 2l5 5h-5V4z"/></svg>Sube tu primer documento legal</div>
   </div>
   <div class="overlay" id="ov-docs"><div class="spin"></div><div class="ov-txt" id="ov-docs-txt">Analizando...</div></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div class="screen" id="s-flash">
+  <div class="nav"><button class="nav-back" id="bk-flash">&#8592;</button><div class="nav-center"><div class="t">Flashcards</div><div class="s">Repaso inteligente</div></div><div style="width:22px"></div></div>
+  <div class="body">
+    <button class="gen-btn" id="gen-flash-btn" onclick="generarFlashcards()">
+      <svg style="width:13px;height:13px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Generar flashcards con IA
+    </button>
+    <div id="flash-loading" style="display:none;text-align:center;padding:20px"><div class="spin" style="margin:0 auto 8px"></div><div style="font-size:10px;color:#5a7abf">Creando tarjetas...</div></div>
+    <div id="flash-empty" style="text-align:center;padding:20px;color:#7a9abf;font-size:10px">
+      <div style="font-size:28px;margin-bottom:8px">🃏</div>
+      Carga un documento y genera<br>tus tarjetas de repaso con IA
+    </div>
+    <div id="flash-content" style="display:none">
+      <div class="fc-nav">
+        <span class="fc-counter" id="fc-counter">1 / 5</span>
+        <div class="fc-arrows">
+          <button class="fc-btn" onclick="fcNav(-1)">&#8592;</button>
+          <button class="fc-btn" onclick="fcNav(1)">&#8594;</button>
+        </div>
+      </div>
+      <div id="fc-card-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CUESTIONARIO -->
+<div class="screen" id="s-quiz">
+  <div class="nav"><button class="nav-back" id="bk-quiz">&#8592;</button><div class="nav-center"><div class="t">Cuestionario</div><div class="s">Test de opción múltiple</div></div><div style="width:22px"></div></div>
+  <div class="body">
+    <button class="gen-btn" id="gen-quiz-btn" onclick="generarCuestionario()">
+      <svg style="width:13px;height:13px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+      Generar cuestionario con IA
+    </button>
+    <div id="quiz-loading" style="display:none;text-align:center;padding:20px"><div class="spin" style="margin:0 auto 8px"></div><div style="font-size:10px;color:#5a7abf">Creando preguntas...</div></div>
+    <div id="quiz-empty" style="text-align:center;padding:20px;color:#7a9abf;font-size:10px">
+      <div style="font-size:28px;margin-bottom:8px">📝</div>
+      Carga un documento y genera<br>un test de opción múltiple con IA
+    </div>
+    <div id="quiz-content" style="display:none">
+      <div id="quiz-score" class="qz-score"><div class="qz-score-num" id="quiz-pts">0/0</div><div class="qz-score-lbl">Respuestas correctas</div></div>
+      <div id="quiz-list"></div>
+      <button class="gen-btn" id="quiz-retry" style="display:none" onclick="generarCuestionario()">Nuevo cuestionario</button>
+    </div>
+  </div>
 </div>
 
 <!-- INVESTIGACIÓN -->
@@ -381,6 +468,8 @@ document.getElementById('bk-docs').addEventListener('click',function(){goTo('s-d
 document.getElementById('btn-research').addEventListener('click',function(){goTo('s-index','s-research');});
 document.getElementById('bk-research').addEventListener('click',function(){goTo('s-research','s-index');});
 document.getElementById('btn-caselaw').addEventListener('click',function(){goTo('s-index','s-caselaw');});
+document.getElementById('bk-flash').addEventListener('click',function(){goTo('s-flash','s-docs');});
+document.getElementById('bk-quiz').addEventListener('click',function(){goTo('s-quiz','s-docs');});
 document.getElementById('bk-caselaw').addEventListener('click',function(){goTo('s-caselaw','s-index');});
 document.querySelectorAll('.filter-row').forEach(function(row){row.querySelectorAll('.fbtn').forEach(function(b){b.addEventListener('click',function(){row.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('af');});this.classList.add('af');});});});
 
@@ -453,7 +542,7 @@ function updateDocs(){
   document.getElementById('tc-docs-sub').textContent=tot>0?tot+' doc'+(tot!==1?'s':''):'Analizar archivos';
   document.getElementById('empty-st').style.display=tot===0?'block':'none';
   document.getElementById('docs-lbl').style.display=tot===0?'none':'block';
-  ['ab1','ab2','ab3','ab4'].forEach(function(id){var el=document.getElementById(id);if(tot>0)el.classList.remove('off');else el.classList.add('off');});
+  ['ab1','ab2','ab3','ab4','ab5','ab6'].forEach(function(id){var el=document.getElementById(id);if(el){if(tot>0)el.classList.remove('off');else el.classList.add('off');}});
 }
 function renderDoc(doc){
   var list=document.getElementById('doc-list'),card=document.createElement('div');
@@ -512,6 +601,129 @@ function setupSpeech(micEl,inputEl,statusEl){
 setupSpeech(document.getElementById('hero-mic'),document.getElementById('hero-inp'),document.getElementById('hero-st'));
 setupSpeech(document.getElementById('chat-mic'),document.getElementById('chat-inp'),null);
 updateDocs();
+
+// ── FLASHCARDS ──────────────────────────────────────────────
+var flashcards=[];
+var fcIndex=0;
+
+function fcRender(){
+  var wrap=document.getElementById('fc-card-wrap');
+  var card=flashcards[fcIndex];
+  if(!card)return;
+  document.getElementById('fc-counter').textContent=(fcIndex+1)+' / '+flashcards.length;
+  wrap.innerHTML='<div class="fc-card" id="fc-current" onclick="fcFlip()"><div class="fc-tag">'+card.tag+'</div><div class="fc-q">'+card.q+'</div><div class="fc-hint" id="fc-hint">Toca para ver la respuesta ↓</div><div class="fc-a" id="fc-ans">'+card.a+'</div></div>';
+}
+function fcFlip(){
+  var ans=document.getElementById('fc-ans');
+  var hint=document.getElementById('fc-hint');
+  if(ans.classList.contains('show')){ans.classList.remove('show');hint.style.display='block';}
+  else{ans.classList.add('show');hint.style.display='none';}
+}
+function fcNav(dir){
+  fcIndex=(fcIndex+dir+flashcards.length)%flashcards.length;
+  fcRender();
+}
+
+async function generarFlashcards(){
+  if(DOCS.length===0){toast('⚠️ Primero carga un documento');return;}
+  var btn=document.getElementById('gen-flash-btn');
+  btn.disabled=true;
+  document.getElementById('flash-empty').style.display='none';
+  document.getElementById('flash-content').style.display='none';
+  document.getElementById('flash-loading').style.display='block';
+  var nombres=DOCS.map(function(d){return d.name;}).join(', ');
+  var a=AREAS[currentArea];
+  var sys='Eres LexTutor, asistente jurídico mexicano. Genera exactamente 5 flashcards de repaso en formato JSON sobre el área de '+a.ctx+' basadas en documentos legales llamados: '+nombres+'. Responde SOLO con JSON válido, sin markdown, sin explicaciones. Formato: [{"tag":"Tema","q":"Pregunta","a":"Respuesta concisa"}]';
+  try{
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:'Genera las flashcards sobre los documentos cargados.'}]})});
+    var data=await resp.json();
+    var txt=data.content[0].text.trim();
+    var clean=txt.replace(/```json|```/g,'').trim();
+    var idx1=clean.indexOf('[');
+    var idx2=clean.lastIndexOf(']');
+    if(idx1>=0&&idx2>idx1)clean=clean.slice(idx1,idx2+1);
+    flashcards=JSON.parse(clean);
+    fcIndex=0;
+    document.getElementById('flash-loading').style.display='none';
+    document.getElementById('flash-content').style.display='block';
+    fcRender();
+  }catch(e){
+    document.getElementById('flash-loading').style.display='none';
+    document.getElementById('flash-empty').style.display='block';
+    document.getElementById('flash-empty').innerHTML='<div style="font-size:28px;margin-bottom:8px">⚠️</div>Error al generar. Intenta de nuevo.';
+    toast('Error al generar flashcards');
+  }
+  btn.disabled=false;
+}
+
+// ── CUESTIONARIO ─────────────────────────────────────────────
+var quizAnswered=0;
+var quizCorrect=0;
+var quizTotal=0;
+
+async function generarCuestionario(){
+  if(DOCS.length===0){toast('⚠️ Primero carga un documento');return;}
+  var btn=document.getElementById('gen-quiz-btn');
+  btn.disabled=true;
+  document.getElementById('quiz-empty').style.display='none';
+  document.getElementById('quiz-content').style.display='none';
+  document.getElementById('quiz-loading').style.display='block';
+  document.getElementById('quiz-retry').style.display='none';
+  var nombres=DOCS.map(function(d){return d.name;}).join(', ');
+  var a=AREAS[currentArea];
+  var sys='Eres LexTutor, asistente jurídico mexicano. Genera exactamente 4 preguntas de opción múltiple sobre '+a.ctx+' basadas en documentos llamados: '+nombres+'. Responde SOLO con JSON válido, sin markdown. Formato: [{"q":"Pregunta","opts":["A) opción","B) opción","C) opción","D) opción"],"correct":0}] donde correct es el índice (0-3) de la respuesta correcta.';
+  try{
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,system:sys,messages:[{role:'user',content:'Genera el cuestionario sobre los documentos cargados.'}]})});
+    var data=await resp.json();
+    var txt=data.content[0].text.trim();
+    var clean=txt.replace(/```json|```/g,'').trim();
+    var idx1=clean.indexOf('[');
+    var idx2=clean.lastIndexOf(']');
+    if(idx1>=0&&idx2>idx1)clean=clean.slice(idx1,idx2+1);
+    var qs=JSON.parse(clean);
+    quizAnswered=0;quizCorrect=0;quizTotal=qs.length;
+    document.getElementById('quiz-loading').style.display='none';
+    document.getElementById('quiz-content').style.display='block';
+    document.getElementById('quiz-score').style.display='none';
+    var list=document.getElementById('quiz-list');
+    list.innerHTML='';
+    qs.forEach(function(q,qi){
+      var item=document.createElement('div');item.className='qz-item';
+      var html='<div class="qz-q">'+(qi+1)+'. '+q.q+'</div>';
+      q.opts.forEach(function(opt,oi){
+        html+='<div class="qz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="quizSelect(this)"><div class="qz-letter">'+['A','B','C','D'][oi]+'</div><div class="qz-text">'+opt.replace(/^[A-D]\)\s*/,'')+'</div></div>';
+      });
+      item.innerHTML=html;list.appendChild(item);
+    });
+  }catch(e){
+    document.getElementById('quiz-loading').style.display='none';
+    document.getElementById('quiz-empty').style.display='block';
+    document.getElementById('quiz-empty').innerHTML='<div style="font-size:28px;margin-bottom:8px">⚠️</div>Error al generar. Intenta de nuevo.';
+    toast('Error al generar cuestionario');
+  }
+  btn.disabled=false;
+}
+
+function quizSelect(el){
+  var qi=el.dataset.qi;
+  var correct=parseInt(el.dataset.correct);
+  var item=el.closest('.qz-item');
+  if(item.querySelector('.locked'))return;
+  var opts=item.querySelectorAll('.qz-opt');
+  opts.forEach(function(o,i){
+    o.classList.add('locked');
+    if(i===correct)o.classList.add('correct');
+    else if(o===el)o.classList.add('wrong');
+  });
+  var chosen=parseInt(el.dataset.oi);
+  if(chosen===correct)quizCorrect++;
+  quizAnswered++;
+  if(quizAnswered===quizTotal){
+    document.getElementById('quiz-pts').textContent=quizCorrect+'/'+quizTotal;
+    document.getElementById('quiz-score').style.display='block';
+    document.getElementById('quiz-retry').style.display='flex';
+  }
+}
 </script>
 </body>
 </html>

@@ -203,6 +203,58 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-heigh
 .ov-txt{font-size:11px;color:#1a2a5e;font-weight:700;}
 .toast{position:absolute;bottom:58px;left:12px;right:12px;background:#1a2a5e;color:#fff;font-size:10px;padding:8px 13px;border-radius:10px;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20;font-weight:600;}
 .toast.show{opacity:1;}
+
+/* ── DASHBOARD ─────────────────────────────── */
+.db-body{background:#eef2ff;padding:13px;flex:1;overflow-y:auto;}
+.db-greeting{background:var(--nc,#1a2a5e);border-radius:13px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.db-greet-text .hi{color:#fff;font-size:13px;font-weight:700;}
+.db-greet-text .sub{color:#7b9dd4;font-size:9px;margin-top:2px;}
+.db-avatar{width:36px;height:36px;border-radius:50%;background:var(--ac,#5b8dee);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+.db-kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;}
+.db-kpi{background:#fff;border:.5px solid #b8ccf0;border-radius:11px;padding:9px 8px;text-align:center;}
+.db-kpi-num{font-size:20px;font-weight:700;color:var(--nc,#1a2a5e);}
+.db-kpi-lbl{font-size:8px;color:#5a7abf;margin-top:1px;}
+.db-kpi-delta{font-size:8px;margin-top:2px;font-weight:700;}
+.db-kpi-delta.up{color:#28a060;}
+.db-kpi-delta.neutral{color:#8a9abf;}
+.db-progress-wrap{background:#fff;border:.5px solid #b8ccf0;border-radius:11px;padding:11px 13px;margin-bottom:12px;}
+.db-prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.db-prog-title{font-size:10px;font-weight:700;color:#1a2a5e;}
+.db-prog-pct{font-size:10px;font-weight:700;color:var(--ac,#5b8dee);}
+.db-bar{height:6px;background:#e4ecff;border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.db-bar-fill{height:100%;border-radius:4px;background:var(--ac,#5b8dee);transition:width .6s ease;}
+.db-prog-areas{display:flex;gap:5px;flex-wrap:wrap;}
+.db-area-tag{font-size:8px;padding:2px 7px;border-radius:9px;font-weight:700;}
+.db-section{margin-bottom:12px;}
+.db-notif{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:9px 11px;margin-bottom:6px;display:flex;align-items:flex-start;gap:9px;cursor:pointer;transition:border-color .15s;}
+.db-notif:hover{border-color:#2d4a9e;}
+.db-notif-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.db-notif-title{font-size:10px;font-weight:700;color:#1a2a5e;line-height:1.3;}
+.db-notif-sub{font-size:9px;color:#5a7abf;margin-top:2px;}
+.db-notif-time{font-size:8px;color:#8a9abf;margin-left:auto;flex-shrink:0;}
+.db-task-item{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:9px 11px;margin-bottom:5px;display:flex;align-items:center;gap:9px;}
+.db-task-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.db-task-name{font-size:10px;color:#1a2a5e;font-weight:600;flex:1;}
+.db-task-badge{font-size:8px;padding:2px 7px;border-radius:8px;font-weight:700;}
+.db-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.db-shortcut{background:var(--nc,#1a2a5e);border-radius:11px;padding:10px 9px;border:none;cursor:pointer;text-align:left;transition:opacity .15s;}
+.db-shortcut:hover{opacity:.88;}
+.db-shortcut:active{transform:scale(.97);}
+.db-sc-icon{font-size:16px;margin-bottom:4px;}
+.db-sc-name{color:#fff;font-size:10px;font-weight:700;}
+.db-sc-sub{color:#93b4e8;font-size:8px;margin-top:1px;}
+.db-analytics{background:#fff;border:.5px solid #b8ccf0;border-radius:11px;padding:11px 13px;margin-bottom:12px;}
+.db-chart-row{display:flex;align-items:flex-end;gap:4px;height:44px;margin:8px 0 4px;}
+.db-bar-col{flex:1;border-radius:3px 3px 0 0;background:var(--ac,#5b8dee);opacity:.7;transition:height .5s,opacity .2s;min-height:4px;cursor:pointer;}
+.db-bar-col:hover{opacity:1;}
+.db-bar-col.active{opacity:1;background:var(--nc,#1a2a5e);}
+.db-chart-labels{display:flex;gap:4px;}
+.db-chart-lbl{flex:1;text-align:center;font-size:7px;color:#8a9abf;}
+.db-recent-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:.5px solid #eef2ff;}
+.db-recent-item:last-child{border-bottom:none;}
+.db-recent-icon{font-size:12px;flex-shrink:0;}
+.db-recent-text{font-size:10px;color:#1a2a5e;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.db-recent-time{font-size:8px;color:#8a9abf;flex-shrink:0;}
 </style>
 
 <div class="phone" id="phone" style="--nc:#1a2a5e;--ac:#5b8dee">
@@ -211,7 +263,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-heigh
 <div class="screen active" id="s-index">
   <div class="nav">
     <div><div class="nav-logo">LEX<span style="color:#5b8dee">TUTOR</span></div><div class="nav-sub" id="nav-sub">Derecho Civil</div></div>
-    <div class="nav-tabs"><button class="nav-tab active">Dashboard</button><button class="nav-tab">Áreas</button></div>
+    <div class="nav-tabs"><button class="nav-tab active" id="tab-dash" onclick="switchTab('dash')">Dashboard</button><button class="nav-tab" id="tab-areas" onclick="switchTab('areas')">Áreas</button></div>
   </div>
   <div class="hero">
     <div class="bot-wrap">
@@ -249,6 +301,75 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-heigh
       <div class="mic-status" id="hero-st"></div>
     </div>
   </div>
+  <!-- VISTA DASHBOARD -->
+  <div id="view-dash" class="db-body" style="display:none">
+    <div class="db-greeting">
+      <div class="db-greet-text">
+        <div class="hi" id="db-greeting-msg">Buenos días ⚖️</div>
+        <div class="sub" id="db-area-label">Área activa: Derecho Civil</div>
+      </div>
+      <div class="db-avatar" id="db-avatar">MA</div>
+    </div>
+    <div class="slabel" style="font-size:9px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;">Rendimiento<span style="flex:1;height:1px;background:#c8d8f0;display:block"></span></div>
+    <div class="db-kpi-row">
+      <div class="db-kpi"><div class="db-kpi-num" id="kpi-consultas">0</div><div class="db-kpi-lbl">Consultas</div><div class="db-kpi-delta neutral" id="kpi-c-delta">sesión activa</div></div>
+      <div class="db-kpi"><div class="db-kpi-num" id="kpi-docs">0</div><div class="db-kpi-lbl">Documentos</div><div class="db-kpi-delta neutral" id="kpi-d-delta">cargados</div></div>
+      <div class="db-kpi"><div class="db-kpi-num" id="kpi-score">—</div><div class="db-kpi-lbl">Últ. quiz</div><div class="db-kpi-delta neutral" id="kpi-s-delta">sin datos</div></div>
+    </div>
+    <div class="db-progress-wrap">
+      <div class="db-prog-header"><span class="db-prog-title">Progreso de sesión</span><span class="db-prog-pct" id="db-pct">0%</span></div>
+      <div class="db-bar"><div class="db-bar-fill" id="db-bar-fill" style="width:0%"></div></div>
+      <div class="db-prog-areas" id="db-areas-visited"></div>
+    </div>
+    <div class="db-section">
+      <div class="slabel" style="font-size:9px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;">Notificaciones<span style="flex:1;height:1px;background:#c8d8f0;display:block"></span></div>
+      <div class="db-notif" onclick="enviar('¿Cuáles son los cambios recientes en el Código Civil Federal?')">
+        <div class="db-notif-icon" style="background:#dce8ff">📋</div>
+        <div><div class="db-notif-title">Actualización Código Civil</div><div class="db-notif-sub">Reforma publicada en DOF · Consulta cambios</div></div>
+        <div class="db-notif-time">Hoy</div>
+      </div>
+      <div class="db-notif" onclick="enviar('¿Qué cambios recientes hubo en materia de amparo en México?')">
+        <div class="db-notif-icon" style="background:#faeeda">⚠️</div>
+        <div><div class="db-notif-title">Criterio SCJN actualizado</div><div class="db-notif-sub">Nueva tesis en materia de amparo directo</div></div>
+        <div class="db-notif-time">Ayer</div>
+      </div>
+      <div class="db-notif" onclick="goTo('s-index','s-docs')">
+        <div class="db-notif-icon" style="background:#e0f5e8">📁</div>
+        <div><div class="db-notif-title" id="db-notif-docs">Sin documentos pendientes</div><div class="db-notif-sub" id="db-notif-docs-sub">Sube documentos para análisis</div></div>
+        <div class="db-notif-time">—</div>
+      </div>
+    </div>
+    <div class="db-section">
+      <div class="slabel" style="font-size:9px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;">Estado de tareas<span style="flex:1;height:1px;background:#c8d8f0;display:block"></span></div>
+      <div class="db-task-item"><div class="db-task-dot" style="background:#28a060"></div><div class="db-task-name" id="task1-name">Consultar área activa</div><span class="db-task-badge" style="background:#e0f5e8;color:#1a6040">Completado</span></div>
+      <div class="db-task-item" id="task-docs-item"><div class="db-task-dot" style="background:#f0a020"></div><div class="db-task-name">Analizar documentos</div><span class="db-task-badge" id="task-docs-badge" style="background:#faeeda;color:#6a3800">Pendiente</span></div>
+      <div class="db-task-item" id="task-quiz-item"><div class="db-task-dot" style="background:#c83030"></div><div class="db-task-name">Completar cuestionario</div><span class="db-task-badge" id="task-quiz-badge" style="background:#ffe0e0;color:#8a1a1a">Pendiente</span></div>
+      <div class="db-task-item"><div class="db-task-dot" style="background:#4a6abf"></div><div class="db-task-name">Revisar jurisprudencia</div><span class="db-task-badge" style="background:#d4e2ff;color:#1a2a8a">En progreso</span></div>
+    </div>
+    <div class="db-section">
+      <div class="slabel" style="font-size:9px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;">Acceso rápido<span style="flex:1;height:1px;background:#c8d8f0;display:block"></span></div>
+      <div class="db-shortcut-row">
+        <button class="db-shortcut" onclick="enviar('Nueva consulta de Derecho Civil: necesito asesoría sobre contratos')"><div class="db-sc-icon">⚖️</div><div class="db-sc-name">Nueva consulta civil</div><div class="db-sc-sub">Contratos · Familia</div></button>
+        <button class="db-shortcut" onclick="goTo('s-index','s-docs')"><div class="db-sc-icon">📄</div><div class="db-sc-name">Subir documento</div><div class="db-sc-sub">Analizar con IA</div></button>
+        <button class="db-shortcut" onclick="goTo('s-index','s-caselaw')"><div class="db-sc-icon">🏛️</div><div class="db-sc-name">Jurisprudencia</div><div class="db-sc-sub">SCJN · TEPJF</div></button>
+        <button class="db-shortcut" onclick="goTo('s-index','s-flash')"><div class="db-sc-icon">🃏</div><div class="db-sc-name">Flashcards</div><div class="db-sc-sub">Repaso rápido</div></button>
+      </div>
+    </div>
+    <div class="db-analytics">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:10px;font-weight:700;color:#1a2a5e">Actividad semanal</span><span style="font-size:8px;color:#5a7abf" id="db-total-label">0 acciones totales</span></div>
+      <div class="db-chart-row" id="db-chart"></div>
+      <div class="db-chart-labels"><span class="db-chart-lbl">L</span><span class="db-chart-lbl">M</span><span class="db-chart-lbl">X</span><span class="db-chart-lbl">J</span><span class="db-chart-lbl">V</span><span class="db-chart-lbl">S</span><span class="db-chart-lbl" id="db-today-lbl">D</span></div>
+    </div>
+    <div class="db-section">
+      <div class="slabel" style="font-size:9px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;">Actividad reciente<span style="flex:1;height:1px;background:#c8d8f0;display:block"></span></div>
+      <div style="background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:5px 11px;" id="db-recent-list">
+        <div style="text-align:center;padding:10px;color:#8a9abf;font-size:9px">Sin actividad aún. Empieza una consulta.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISTA DASHBOARD (original hero + herramientas) -->
+  <div id="view-main" style="display:flex;flex-direction:column;flex:1;">
   <div class="body">
     <div class="slabel">Herramientas</div>
     <div class="grid2">
@@ -271,6 +392,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-heigh
       <div class="mo" data-v="administrativo"><div class="mo-dot" style="background:#c07a10"></div><div><div class="mo-name">Derecho Administrativo</div><div class="mo-desc">Actos admin · Recursos · TFJA</div></div></div>
     </div>
   </div>
+  </div><!-- /view-main -->
 </div>
 
 <!-- CHAT -->
@@ -436,7 +558,14 @@ var SUGGESTIONS={
 };
 
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2400);}
-function goTo(a,b){document.getElementById(a).classList.remove('active');document.getElementById(b).classList.add('active');}
+function goTo(a,b){
+  document.getElementById(a).classList.remove('active');
+  document.getElementById(b).classList.add('active');
+  if(b==='s-index'){
+    var vd=document.getElementById('view-dash');
+    if(vd&&vd.style.display!=='none') refreshDashboard();
+  }
+}
 
 function setArea(v){
   var a=AREAS[v];if(!a)return;
@@ -458,6 +587,13 @@ function setArea(v){
   var sg=SUGGESTIONS[v]||[];
   qas.forEach(function(btn,i){if(sg[i])btn.textContent=sg[i];});
 }
+
+// Registrar visita de área y parche para setArea
+var _setAreaOrig = setArea;
+setArea = function(v){
+  _setAreaOrig(v);
+  DB_AREAS_VISITED.add(v);
+};
 
 document.getElementById('mat-btn').addEventListener('click',function(){document.getElementById('mat-dd').classList.toggle('open');this.classList.toggle('open');});
 document.querySelectorAll('.mo').forEach(function(el){el.addEventListener('click',function(){setArea(this.dataset.v);document.getElementById('mat-dd').classList.remove('open');document.getElementById('mat-btn').classList.remove('open');});});
@@ -704,6 +840,165 @@ async function generarCuestionario(){
   btn.disabled=false;
 }
 
+// ── DASHBOARD ────────────────────────────────
+var DB_ACTIVITY = [2,5,3,7,4,1,0]; // L-D datos base
+var DB_TODAY = new Date().getDay(); // 0=dom,6=sab
+var DB_SESSION_START = Date.now();
+var DB_AREAS_VISITED = new Set();
+var DB_RECENT = [];
+var DB_CONSULTAS = 0;
+var DB_QUIZ_SCORE = null;
+
+function switchTab(tab){
+  var tabDash = document.getElementById('tab-dash');
+  var tabAreas = document.getElementById('tab-areas');
+  var viewDash = document.getElementById('view-dash');
+  var viewMain = document.getElementById('view-main');
+  var hero = document.querySelector('#s-index .hero');
+  if(tab === 'dash'){
+    tabDash.classList.add('active'); tabAreas.classList.remove('active');
+    viewDash.style.display = 'block'; viewMain.style.display = 'none';
+    if(hero) hero.style.display = 'none';
+    refreshDashboard();
+  } else {
+    tabAreas.classList.add('active'); tabDash.classList.remove('active');
+    viewDash.style.display = 'none'; viewMain.style.display = 'flex';
+    if(hero) hero.style.display = 'block';
+  }
+}
+
+function getGreeting(){
+  var h = new Date().getHours();
+  if(h < 12) return 'Buenos días ⚖️';
+  if(h < 19) return 'Buenas tardes ⚖️';
+  return 'Buenas noches ⚖️';
+}
+
+function addRecentActivity(icon, text){
+  var now = new Date();
+  var time = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  DB_RECENT.unshift({icon:icon, text:text, time:time});
+  if(DB_RECENT.length > 8) DB_RECENT.pop();
+  DB_ACTIVITY[DB_TODAY] = (DB_ACTIVITY[DB_TODAY]||0) + 1;
+}
+
+function refreshDashboard(){
+  // Saludo
+  document.getElementById('db-greeting-msg').textContent = getGreeting();
+  var a = AREAS[currentArea];
+  if(a) document.getElementById('db-area-label').textContent = 'Área activa: '+a.name.replace(/^[^\s]+\s/,'');
+
+  // KPIs
+  document.getElementById('kpi-consultas').textContent = DB_CONSULTAS;
+  document.getElementById('kpi-docs').textContent = DOCS.length;
+  if(DB_QUIZ_SCORE !== null){
+    document.getElementById('kpi-score').textContent = DB_QUIZ_SCORE;
+    document.getElementById('kpi-s-delta').textContent = 'último test';
+    document.getElementById('kpi-s-delta').className = 'db-kpi-delta up';
+  }
+  if(DB_CONSULTAS > 0){
+    document.getElementById('kpi-c-delta').textContent = '+'+DB_CONSULTAS+' hoy';
+    document.getElementById('kpi-c-delta').className = 'db-kpi-delta up';
+  }
+  if(DOCS.length > 0){
+    document.getElementById('kpi-d-delta').textContent = DOCS.length+' en biblioteca';
+    document.getElementById('kpi-d-delta').className = 'db-kpi-delta up';
+  }
+
+  // Progreso
+  var steps = 0;
+  if(DB_CONSULTAS > 0) steps++;
+  if(DOCS.length > 0) steps++;
+  if(DB_QUIZ_SCORE !== null) steps++;
+  if(DB_AREAS_VISITED.size > 1) steps++;
+  var pct = Math.round((steps/4)*100);
+  document.getElementById('db-pct').textContent = pct+'%';
+  document.getElementById('db-bar-fill').style.width = pct+'%';
+
+  // Areas visitadas
+  var av = document.getElementById('db-areas-visited');
+  av.innerHTML = '';
+  DB_AREAS_VISITED.forEach(function(v){
+    var colors = {civil:'#dce8ff',electoral:'#faeeda',penal:'#ffe0e0',mercantil:'#e0f5e8',amparo:'#ede0ff',administrativo:'#fff0d4'};
+    var tc = {civil:'#1a3a9e',electoral:'#6a3800',penal:'#8a1a1a',mercantil:'#1a6040',amparo:'#4a2a9e',administrativo:'#6a4000'};
+    var nm = AREAS[v] ? AREAS[v].name.replace(/^[^\s]+\s/,'') : v;
+    var tag = document.createElement('span');
+    tag.className = 'db-area-tag';
+    tag.style.background = colors[v]||'#dce8ff';
+    tag.style.color = tc[v]||'#1a3a9e';
+    tag.textContent = nm;
+    av.appendChild(tag);
+  });
+
+  // Notificación docs
+  if(DOCS.length > 0){
+    document.getElementById('db-notif-docs').textContent = DOCS.length+' documento'+(DOCS.length!==1?'s':'')+' cargado'+(DOCS.length!==1?'s':'');
+    document.getElementById('db-notif-docs-sub').textContent = 'Listo para análisis legal';
+  }
+
+  // Tareas
+  if(DOCS.length > 0){
+    document.getElementById('task-docs-badge').textContent = 'Completado';
+    document.getElementById('task-docs-badge').style.background = '#e0f5e8';
+    document.getElementById('task-docs-badge').style.color = '#1a6040';
+  }
+  if(DB_QUIZ_SCORE !== null){
+    document.getElementById('task-quiz-badge').textContent = 'Completado';
+    document.getElementById('task-quiz-badge').style.background = '#e0f5e8';
+    document.getElementById('task-quiz-badge').style.color = '#1a6040';
+  }
+
+  // Gráfica semanal
+  var chart = document.getElementById('db-chart');
+  chart.innerHTML = '';
+  var max = Math.max.apply(null, DB_ACTIVITY) || 1;
+  var days = ['L','M','X','J','V','S','D'];
+  DB_ACTIVITY.forEach(function(val,i){
+    var col = document.createElement('div');
+    col.className = 'db-bar-col' + (i===DB_TODAY?' active':'');
+    var h = Math.round((val/max)*44);
+    col.style.height = Math.max(h,4)+'px';
+    col.title = days[i]+': '+val+' acciones';
+    chart.appendChild(col);
+  });
+  var total = DB_ACTIVITY.reduce(function(a,b){return a+b;},0);
+  document.getElementById('db-total-label').textContent = total+' acciones totales';
+  var dnames = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  document.getElementById('db-today-lbl').textContent = dnames[DB_TODAY];
+
+  // Recientes
+  var rl = document.getElementById('db-recent-list');
+  if(DB_RECENT.length === 0){
+    rl.innerHTML = '<div style="text-align:center;padding:10px;color:#8a9abf;font-size:9px">Sin actividad aún. Empieza una consulta.</div>';
+  } else {
+    rl.innerHTML = DB_RECENT.map(function(r){
+      return '<div class="db-recent-item"><span class="db-recent-icon">'+r.icon+'</span><span class="db-recent-text">'+r.text+'</span><span class="db-recent-time">'+r.time+'</span></div>';
+    }).join('');
+  }
+}
+
+// Interceptar enviar para registrar actividad
+var _enviarOrig = enviar;
+enviar = function(txt){
+  txt = (txt||'').trim(); if(!txt) return;
+  DB_CONSULTAS++;
+  DB_AREAS_VISITED.add(currentArea);
+  addRecentActivity('💬', txt.length>40 ? txt.slice(0,40)+'…' : txt);
+  _enviarOrig(txt);
+};
+
+// Interceptar handleFiles para registrar docs
+var _handleFilesOrig = handleFiles;
+handleFiles = function(files){
+  _handleFilesOrig(files);
+  if(files.length>0){
+    Array.from(files).forEach(function(f){
+      addRecentActivity('📄', 'Documento cargado: '+f.name);
+    });
+    DB_AREAS_VISITED.add(currentArea);
+  }
+};
+
 function quizSelect(el){
   var qi=el.dataset.qi;
   var correct=parseInt(el.dataset.correct);
@@ -722,6 +1017,8 @@ function quizSelect(el){
     document.getElementById('quiz-pts').textContent=quizCorrect+'/'+quizTotal;
     document.getElementById('quiz-score').style.display='block';
     document.getElementById('quiz-retry').style.display='flex';
+    DB_QUIZ_SCORE = quizCorrect+'/'+quizTotal;
+    addRecentActivity('📝','Cuestionario completado: '+DB_QUIZ_SCORE+' correctas');
   }
 }
 </script>

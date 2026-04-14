@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LexTutor — AI Legal Assistant</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+::-webkit-scrollbar{display:none;}
+body{font-family:system-ui,-apple-system,sans-serif;background:#080d1f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.phone{width:300px;min-height:620px;background:#fff;border-radius:32px;border:2px solid #2a3a6e;overflow:hidden;position:relative;box-shadow:0 8px 48px rgba(45,74,158,0.35);}
+.screen{display:none;flex-direction:column;min-height:620px;}
+.screen.active{display:flex;}
+.nav{background:var(--nc,#1a2a5e);padding:11px 14px;display:flex;align-items:center;gap:8px;}
+.nav-logo{color:#fff;font-size:13px;font-weight:700;letter-spacing:1px;}
+.nav-sub{color:#7b9dd4;font-size:9px;margin-top:1px;}
+.nav-tabs{display:flex;gap:2px;margin-left:auto;}
+.nav-tab{color:#7b9dd4;font-size:10px;padding:4px 9px;border-radius:6px;cursor:pointer;border:none;background:none;}
+.nav-tab.active{background:rgba(255,255,255,.15);color:#fff;}
+.nav-back{color:#7b9dd4;font-size:16px;background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;}
+.nav-center{flex:1;text-align:center;}
+.nav-center .t{color:#fff;font-size:12px;font-weight:700;}
+.nav-center .s{color:#7b9dd4;font-size:9px;}
+.hero{background:var(--nc,#1a2a5e);padding:16px 16px 20px;text-align:center;transition:background .3s;}
+.hero h1{color:#fff;font-size:21px;font-weight:700;letter-spacing:4px;margin-top:8px;}
+.h1a{color:var(--ac,#5b8dee);}
+.hero-sub{color:rgba(255,255,255,.6);font-size:9px;letter-spacing:2px;margin-top:3px;}
+.bot-wrap{position:relative;width:70px;height:70px;margin:0 auto;}
+.bot-ring{position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--ac,#5b8dee);opacity:.35;animation:ring-pulse 2.2s ease-in-out infinite;}
+@keyframes ring-pulse{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.1);opacity:.1}}
+.ask-wrap{margin:13px 0 0;}
+.ask-row{display:flex;align-items:center;background:rgba(255,255,255,.11);border-radius:25px;border:1.5px solid rgba(91,141,238,.45);overflow:hidden;}
+.ask-row input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:11px;padding:10px 13px;min-width:0;}
+.ask-row input::placeholder{color:rgba(255,255,255,.45);}
+.ask-btns{display:flex;align-items:center;padding-right:6px;gap:3px;}
+.mic-btn{background:none;border:none;cursor:pointer;padding:5px;border-radius:50%;display:flex;transition:background .2s;}
+.mic-btn:hover{background:rgba(255,255,255,.1);}
+.mic-btn svg{width:15px;height:15px;fill:var(--ac,#5b8dee);}
+.mic-btn.listening svg{fill:#ff6b6b;animation:mic-pulse .7s infinite alternate;}
+@keyframes mic-pulse{from{opacity:.5;transform:scale(.9)}to{opacity:1;transform:scale(1.2)}}
+.send-hero{background:var(--ac,#5b8dee);border:none;cursor:pointer;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.send-hero svg{width:11px;height:11px;fill:#fff;}
+.mic-hint{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:5px;}
+.mic-hint span{font-size:9px;color:rgba(255,255,255,.42);}
+.mic-status{font-size:9px;color:var(--ac,#5b8dee);min-height:12px;text-align:center;margin-top:3px;}
+.body{background:#eef2ff;padding:13px;flex:1;overflow-y:auto;}
+.slabel{font-size:9px;font-weight:700;color:#2d4a9e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.slabel::after{content:'';flex:1;height:1px;background:#c8d8f0;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px;}
+.tool-card{background:var(--nc,#1a2a5e);border-radius:13px;padding:12px 10px;cursor:pointer;border:none;text-align:left;width:100%;transition:transform .15s,opacity .15s;position:relative;overflow:hidden;}
+.tool-card:hover{transform:translateY(-1px);opacity:.92;}
+.tool-card:active{transform:scale(.97);}
+.tc-badge{position:absolute;top:8px;right:8px;background:var(--ac,#5b8dee);color:#fff;font-size:7px;font-weight:700;padding:2px 5px;border-radius:8px;}
+.tc-icon{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin-bottom:7px;}
+.tc-icon svg{width:15px;height:15px;fill:#fff;}
+.tc-name{color:#fff;font-size:11px;font-weight:700;}
+.tc-sub{color:#93b4e8;font-size:9px;margin-top:2px;}
+.mat-btn{width:100%;background:#fff;border:.5px solid #b8ccf0;border-radius:12px;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .2s;}
+.mat-btn:hover{border-color:#2d4a9e;}
+.mat-name{font-size:12px;font-weight:700;color:#1a2a5e;}
+.mat-sub{font-size:9px;color:#5a7abf;margin-top:1px;}
+.mat-chev{font-size:14px;color:#2d4a9e;transition:transform .2s;}
+.mat-btn.open .mat-chev{transform:rotate(180deg);}
+.mat-dd{background:#fff;border:.5px solid #b8ccf0;border-radius:12px;margin-top:4px;overflow:hidden;display:none;}
+.mat-dd.open{display:block;}
+.mo{display:flex;align-items:center;gap:10px;padding:9px 13px;cursor:pointer;border-bottom:.5px solid #eef2ff;transition:background .15s;}
+.mo:last-child{border-bottom:none;}
+.mo:hover{background:#f4f7ff;}
+.mo.sel{background:#e4ecff;}
+.mo-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.mo-name{font-size:11px;color:#1a2a5e;font-weight:700;}
+.mo-desc{font-size:9px;color:#5a7abf;}
+.mo-ck{margin-left:auto;font-size:12px;color:#2d4a9e;font-weight:700;}
+.chat-body{background:#eef2ff;padding:12px;flex:1;display:flex;flex-direction:column;gap:10px;overflow-y:auto;}
+.chat-pill{align-self:center;background:#d4e2ff;border:.5px solid #b0c4f0;border-radius:20px;font-size:9px;color:#1a2a5e;padding:3px 12px;font-weight:700;}
+.msg{display:flex;gap:7px;align-items:flex-end;}
+.msg.user{flex-direction:row-reverse;}
+.ava{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;}
+.msg.bot .ava{background:var(--nc,#1a2a5e);color:#fff;}
+.msg.user .ava{background:#b8ccf0;color:#1a2a5e;}
+.bubble{max-width:204px;padding:8px 11px;border-radius:14px;font-size:11px;line-height:1.55;}
+.msg.bot .bubble{background:#fff;border:.5px solid #b8ccf0;color:#1a2a5e;border-bottom-left-radius:3px;}
+.msg.user .bubble{background:var(--nc,#1a2a5e);color:#fff;border-bottom-right-radius:3px;}
+.err-bubble{background:#fff0f0;border:.5px solid #f0a0a0;color:#8a1a1a;font-size:10px;padding:8px 11px;border-radius:14px;border-bottom-left-radius:3px;max-width:204px;line-height:1.5;}
+.qa-row{display:flex;gap:5px;flex-wrap:wrap;padding-left:31px;}
+.qa-btn{font-size:9px;border:.5px solid #4a6abf;color:#1a2a5e;background:#fff;border-radius:14px;padding:4px 9px;cursor:pointer;font-weight:600;transition:all .15s;}
+.qa-btn:hover{background:#1a2a5e;color:#fff;border-color:#1a2a5e;}
+.typing{display:flex;gap:4px;padding:8px 11px;background:#fff;border-radius:14px;border-bottom-left-radius:3px;border:.5px solid #b8ccf0;}
+.typing span{width:5px;height:5px;border-radius:50%;background:#4a6abf;animation:blink 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.chat-footer{background:#fff;padding:9px 11px;border-top:.5px solid #c8d8f0;display:flex;gap:7px;align-items:center;}
+.chat-footer input{flex:1;border:.5px solid #b8ccf0;border-radius:18px;padding:7px 11px;font-size:10px;background:#f4f7ff;color:#1a2a5e;outline:none;}
+.chat-footer input:focus{border-color:#2d4a9e;}
+.chat-footer input::placeholder{color:#7a9abf;}
+.chat-mic{background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;display:flex;}
+.chat-mic svg{width:14px;height:14px;fill:#4a6abf;}
+.chat-mic.listening svg{fill:#ff6b6b;animation:mic-pulse .7s infinite alternate;}
+.send-btn{width:28px;height:28px;border-radius:50%;background:var(--nc,#1a2a5e);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+.send-btn svg{width:12px;height:12px;fill:#fff;}
+.upload-zone{border:2px dashed #b0c4f0;border-radius:13px;padding:20px 12px;text-align:center;background:#fff;cursor:pointer;transition:all .2s;position:relative;}
+.upload-zone:hover,.upload-zone.drag-over{border-color:#2d4a9e;background:#f0f5ff;}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone svg{width:30px;fill:#4a6abf;display:block;margin:0 auto 8px;}
+.upload-zone p{font-size:10px;color:#1a2a5e;font-weight:700;}
+.upload-zone span{font-size:9px;color:#5a7abf;}
+.upload-btn{display:inline-block;margin-top:9px;background:#1a2a5e;color:#fff;font-size:10px;padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-weight:700;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:11px;}
+.stat-card{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:8px 6px;text-align:center;}
+.stat-num{font-size:20px;font-weight:700;color:#1a2a5e;}
+.stat-lbl{font-size:8px;color:#5a7abf;margin-top:1px;}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:11px;}
+.ab{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:10px 9px;cursor:pointer;text-align:left;transition:all .15s;}
+.ab:hover{background:#f0f5ff;border-color:#4a6abf;}
+.ab:active{transform:scale(.97);}
+.ab.off{opacity:.35;cursor:not-allowed;}
+.ab-icon{font-size:15px;margin-bottom:4px;}
+.ab-text{font-size:10px;color:#1a2a5e;font-weight:700;line-height:1.3;}
+.doc-list{display:flex;flex-direction:column;gap:6px;}
+.doc-card{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:9px 10px;display:flex;align-items:center;gap:8px;}
+.doc-thumb{width:32px;height:38px;border-radius:6px;background:#d4e2ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
+.doc-thumb svg{width:16px;fill:#2d4a9e;}
+.doc-ext{position:absolute;bottom:2px;font-size:6px;font-weight:700;color:#2d4a9e;text-transform:uppercase;}
+.doc-info{flex:1;min-width:0;}
+.doc-name{font-size:10px;color:#1a2a5e;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-meta{font-size:8px;color:#5a7abf;margin-top:1px;}
+.doc-pbar{height:2px;background:#d4e2ff;border-radius:2px;margin-top:4px;overflow:hidden;}
+.doc-pfill{height:100%;background:#2d4a9e;border-radius:2px;transition:width .5s;}
+.doc-acts{display:flex;gap:3px;flex-shrink:0;}
+.dact{background:none;border:.5px solid #b8ccf0;border-radius:6px;padding:3px 6px;font-size:8px;color:#2d4a9e;cursor:pointer;font-weight:700;}
+.dact:hover{background:#d4e2ff;}
+.dact.del{border-color:#f0a0a0;color:#8a1a1a;}
+.dact.del:hover{background:#ffe0e0;}
+.empty-st{text-align:center;padding:18px 10px;color:#7a9abf;font-size:10px;}
+.empty-st svg{width:30px;fill:#b0c4f0;margin:0 auto 8px;display:block;}
+.search-bar{background:#fff;border:.5px solid #b8ccf0;border-radius:22px;display:flex;align-items:center;padding:8px 13px;gap:7px;margin-bottom:11px;}
+.search-bar input{border:none;flex:1;outline:none;font-size:10px;color:#1a2a5e;background:transparent;}
+.search-bar input::placeholder{color:#7a9abf;}
+.search-bar svg{width:14px;fill:#2d4a9e;flex-shrink:0;}
+.src-card{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:9px 11px;margin-bottom:6px;cursor:pointer;transition:border-color .15s;}
+.src-card:hover{border-color:#2d4a9e;background:#f8fbff;}
+.sc-tag{font-size:8px;font-weight:700;color:#2d4a9e;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px;}
+.sc-title{font-size:10px;color:#1a2a5e;font-weight:700;}
+.sc-sub{font-size:9px;color:#5a7abf;margin-top:2px;}
+.hist-item{font-size:10px;color:#2d4a9e;padding:6px 0;border-bottom:.5px solid #eef2ff;display:flex;align-items:center;gap:6px;cursor:pointer;transition:color .15s;}
+.hist-item:last-child{border-bottom:none;}
+.hist-item:hover{color:#1a2a5e;}
+.hist-item svg{width:10px;fill:#b0c4f0;flex-shrink:0;}
+.filter-row{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;}
+.fbtn{font-size:10px;border:.5px solid #b8ccf0;color:#1a2a5e;background:#fff;border-radius:15px;padding:5px 10px;cursor:pointer;font-weight:600;transition:all .15s;}
+.fbtn.af{background:#1a2a5e;color:#fff;border-color:#1a2a5e;}
+.fbtn:hover:not(.af){background:#f0f5ff;}
+.tc{background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:10px 11px;margin-bottom:6px;cursor:pointer;transition:border-color .15s;}
+.tc:hover{border-color:#2d4a9e;}
+.th{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.ttag{font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;text-transform:uppercase;}
+.tdate{font-size:8px;color:#5a7abf;}
+.ttitle{font-size:10px;color:#1a2a5e;font-weight:700;line-height:1.4;}
+.texc{font-size:9px;color:#4a6abf;margin-top:3px;line-height:1.45;}
+.overlay{display:none;position:absolute;inset:0;background:rgba(238,242,255,.94);align-items:center;justify-content:center;flex-direction:column;gap:11px;z-index:10;}
+.overlay.show{display:flex;}
+.spin{width:28px;height:28px;border:3px solid #c8d8f0;border-top-color:#1a2a5e;border-radius:50%;animation:sp .8s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ov-txt{font-size:11px;color:#1a2a5e;font-weight:700;}
+.toast{position:absolute;bottom:58px;left:12px;right:12px;background:#1a2a5e;color:#fff;font-size:10px;padding:8px 13px;border-radius:10px;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20;font-weight:600;}
+.toast.show{opacity:1;}
+</style>
+
+<div class="phone" id="phone" style="--nc:#1a2a5e;--ac:#5b8dee">
+
+<!-- INDEX -->
+<div class="screen active" id="s-index">
+  <div class="nav">
+    <div><div class="nav-logo">LEX<span style="color:#5b8dee">TUTOR</span></div><div class="nav-sub" id="nav-sub">Derecho Civil</div></div>
+    <div class="nav-tabs"><button class="nav-tab active">Dashboard</button><button class="nav-tab">Áreas</button></div>
+  </div>
+  <div class="hero">
+    <div class="bot-wrap">
+      <div class="bot-ring"></div>
+      <svg viewBox="0 0 80 80" width="70" height="70" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="33" r="23" fill="#2d4a9e" stroke="#5b8dee" stroke-width="2"/>
+        <rect x="17" y="27" width="8" height="15" rx="4" fill="#2d4a9e" stroke="#5b8dee" stroke-width="1.5"/>
+        <rect x="55" y="27" width="8" height="15" rx="4" fill="#2d4a9e" stroke="#5b8dee" stroke-width="1.5"/>
+        <rect x="25" y="29" width="30" height="10" rx="5" fill="#4a6abf" opacity=".7"/>
+        <rect x="27" y="30" width="10" height="7" rx="2" fill="none" stroke="#fff" stroke-width="1.3"/>
+        <rect x="43" y="30" width="10" height="7" rx="2" fill="none" stroke="#fff" stroke-width="1.3"/>
+        <line x1="37" y1="33.5" x2="43" y2="33.5" stroke="#fff" stroke-width="1.3"/>
+        <circle cx="32" cy="33.5" r="2.5" fill="#0d1a3a"/>
+        <circle cx="48" cy="33.5" r="2.5" fill="#0d1a3a"/>
+        <circle cx="32.8" cy="33" r="1" fill="#7bc8ff"/>
+        <circle cx="48.8" cy="33" r="1" fill="#7bc8ff"/>
+        <rect x="33" y="43" width="14" height="4" rx="2" fill="#6a8abf"/>
+        <rect x="30" y="55" width="20" height="12" rx="4" fill="#1e3a7e" stroke="#4a6abf" stroke-width="1.5"/>
+        <path d="M36 55 L44 55 L42 62 L38 62Z" fill="#5b8dee"/>
+        <rect x="37" y="14" width="6" height="7" rx="2" fill="#4a6abf"/>
+        <circle cx="40" cy="13" r="3" fill="#5b8dee" stroke="#93cfff" stroke-width="1"/>
+      </svg>
+    </div>
+    <h1>LEX<span class="h1a">TUTOR</span></h1>
+    <p class="hero-sub">AI-POWERED LEGAL ASSISTANT</p>
+    <div class="ask-wrap">
+      <div class="ask-row">
+        <input id="hero-inp" type="text" placeholder="Hazme una consulta legal..."/>
+        <div class="ask-btns">
+          <button class="mic-btn" id="hero-mic"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 013 3v6a3 3 0 01-6 0V4a3 3 0 013-3zm-1 17.93V21h2v-2.07A7 7 0 0019 12h-2a5 5 0 01-10 0H5a7 7 0 006 6.93z"/></svg></button>
+          <button class="send-hero" id="hero-send"><svg viewBox="0 0 20 20"><path d="M2 10L18 2 12 18l-2-6z"/></svg></button>
+        </div>
+      </div>
+      <div class="mic-hint"><svg style="width:9px;height:9px;fill:rgba(255,255,255,.35)" viewBox="0 0 24 24"><path d="M12 1a3 3 0 013 3v6a3 3 0 01-6 0V4a3 3 0 013-3zm-1 17.93V21h2v-2.07A7 7 0 0019 12h-2a5 5 0 01-10 0H5a7 7 0 006 6.93z"/></svg><span>Toca el micrófono para hablar</span></div>
+      <div class="mic-status" id="hero-st"></div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="slabel">Herramientas</div>
+    <div class="grid2">
+      <button class="tool-card" id="btn-chat"><div class="tc-badge">IA</div><div class="tc-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div><div class="tc-name">Asistente Legal</div><div class="tc-sub">Chat con IA real</div></button>
+      <button class="tool-card" id="btn-docs"><div class="tc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 2l5 5h-5V4zM8 17v-1h8v1H8zm0-3v-1h8v1H8zm0-3v-1h4v1H8z"/></svg></div><div class="tc-name">Documentos</div><div class="tc-sub" id="tc-docs-sub">Analizar archivos</div></button>
+      <button class="tool-card" id="btn-research"><div class="tc-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="tc-name">Investigación</div><div class="tc-sub">Doctrina y leyes</div></button>
+      <button class="tool-card" id="btn-caselaw"><div class="tc-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div><div class="tc-name">Jurisprudencia</div><div class="tc-sub">SCJN · TEPJF · TCC</div></button>
+    </div>
+    <div class="slabel">Área activa</div>
+    <button class="mat-btn" id="mat-btn">
+      <div><div class="mat-name" id="mat-name">⚖️ Derecho Civil</div><div class="mat-sub" id="mat-sub">Contratos · Familia · Obligaciones</div></div>
+      <div class="mat-chev">&#8964;</div>
+    </button>
+    <div class="mat-dd" id="mat-dd">
+      <div class="mo sel" data-v="civil"><div class="mo-dot" style="background:#2d4a9e"></div><div><div class="mo-name">Derecho Civil</div><div class="mo-desc">Contratos · Familia · Obligaciones</div></div><div class="mo-ck">✓</div></div>
+      <div class="mo" data-v="electoral"><div class="mo-dot" style="background:#c9a227"></div><div><div class="mo-name">Derecho Electoral</div><div class="mo-desc">TEPJF · INE · Candidaturas</div></div></div>
+      <div class="mo" data-v="penal"><div class="mo-dot" style="background:#c43a3a"></div><div><div class="mo-name">Derecho Penal</div><div class="mo-desc">CNPP · Juicios orales · Delitos</div></div></div>
+      <div class="mo" data-v="mercantil"><div class="mo-dot" style="background:#1a8a60"></div><div><div class="mo-name">Derecho Mercantil</div><div class="mo-desc">Sociedades · Títulos · Quiebras</div></div></div>
+      <div class="mo" data-v="amparo"><div class="mo-dot" style="background:#6a5ec0"></div><div><div class="mo-name">Amparo</div><div class="mo-desc">Directo · Indirecto · SCJN</div></div></div>
+      <div class="mo" data-v="administrativo"><div class="mo-dot" style="background:#c07a10"></div><div><div class="mo-name">Derecho Administrativo</div><div class="mo-desc">Actos admin · Recursos · TFJA</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="screen" id="s-chat">
+  <div class="nav"><button class="nav-back" id="bk-chat">&#8592;</button><div class="nav-center"><div class="t">Asistente LexTutor</div><div class="s" id="chat-sub">Derecho Civil · activo</div></div><div style="width:22px"></div></div>
+  <div class="chat-body" id="chat-msgs">
+    <div class="chat-pill" id="chat-pill">Derecho Civil</div>
+    <div class="msg bot"><div class="ava">LT</div><div class="bubble">¡Hola! Soy LexTutor ⚖️ Tu asistente legal con IA. Escribe o usa el micrófono para tu consulta jurídica.</div></div>
+    <div class="qa-row">
+      <div class="qa-btn" onclick="enviarQA(this)">¿Qué es un contrato?</div>
+      <div class="qa-btn" onclick="enviarQA(this)">Elementos del acto jurídico</div>
+      <div class="qa-btn" onclick="enviarQA(this)">Tipos de nulidad</div>
+    </div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chat-inp" placeholder="Escribe tu consulta legal..."/>
+    <button class="chat-mic" id="chat-mic"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 013 3v6a3 3 0 01-6 0V4a3 3 0 013-3zm-1 17.93V21h2v-2.07A7 7 0 0019 12h-2a5 5 0 01-10 0H5a7 7 0 006 6.93z"/></svg></button>
+    <button class="send-btn" id="chat-send"><svg viewBox="0 0 20 20"><path d="M2 10L18 2 12 18l-2-6z"/></svg></button>
+  </div>
+</div>
+
+<!-- DOCUMENTOS -->
+<div class="screen" id="s-docs">
+  <div class="nav"><button class="nav-back" id="bk-docs">&#8592;</button><div class="nav-center"><div class="t">Documentos Legales</div><div class="s" id="docs-nav-sub">0 archivos</div></div><div style="width:22px"></div></div>
+  <div class="body">
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="file-inp" accept=".pdf,.doc,.docx,.txt" multiple/>
+      <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+      <p>Arrastra documentos legales aquí</p>
+      <span>Contratos · Escrituras · Sentencias · PDF</span><br>
+      <button class="upload-btn" onclick="document.getElementById('file-inp').click();event.stopPropagation()">Seleccionar archivos</button>
+    </div>
+    <div style="margin:10px 0 7px"><div class="slabel">Mi biblioteca</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Archivos</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-pdf">0</div><div class="stat-lbl">PDFs</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-pags">0</div><div class="stat-lbl">Págs. est.</div></div>
+      </div>
+    </div>
+    <div class="slabel">Análisis rápido</div>
+    <div class="analysis-grid">
+      <button class="ab off" id="ab1" onclick="runAn('cláusulas abusivas','Detectando cláusulas abusivas...')"><div class="ab-icon">🔍</div><div class="ab-text">Detectar cláusulas abusivas</div></button>
+      <button class="ab off" id="ab2" onclick="runAn('fechas límite y plazos','Extrayendo fechas y plazos...')"><div class="ab-icon">📅</div><div class="ab-text">Extraer fechas y plazos</div></button>
+      <button class="ab off" id="ab3" onclick="runAn('resumen ejecutivo legal','Generando resumen...')"><div class="ab-icon">⚖️</div><div class="ab-text">Resumen ejecutivo</div></button>
+      <button class="ab off" id="ab4" onclick="runAn('riesgos legales','Analizando riesgos...')"><div class="ab-icon">🚩</div><div class="ab-text">Riesgos legales</div></button>
+    </div>
+    <div class="slabel" id="docs-lbl" style="display:none">Documentos cargados</div>
+    <div class="doc-list" id="doc-list"></div>
+    <div class="empty-st" id="empty-st"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 2l5 5h-5V4z"/></svg>Sube tu primer documento legal</div>
+  </div>
+  <div class="overlay" id="ov-docs"><div class="spin"></div><div class="ov-txt" id="ov-docs-txt">Analizando...</div></div>
+</div>
+
+<!-- INVESTIGACIÓN -->
+<div class="screen" id="s-research">
+  <div class="nav"><button class="nav-back" id="bk-research">&#8592;</button><div class="nav-center"><div class="t">Investigación Legal</div><div class="s">Doctrina · Legislación</div></div><div style="width:22px"></div></div>
+  <div class="body">
+    <div class="search-bar"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input type="text" placeholder="Buscar doctrina, ley, reglamento..."></div>
+    <div class="filter-row"><button class="fbtn af">Todos</button><button class="fbtn">Legislación</button><button class="fbtn">Doctrina</button><button class="fbtn">Tratados</button></div>
+    <div class="slabel">Fuentes principales</div>
+    <div class="src-card" onclick="enviar('Explícame el Diario Oficial de la Federación y cómo se consulta para investigación jurídica')"><div class="sc-tag">Legislación Federal</div><div class="sc-title">Diario Oficial de la Federación</div><div class="sc-sub">Leyes · Reglamentos · Decretos</div></div>
+    <div class="src-card" onclick="enviar('¿Cuáles son los tratados internacionales de derechos humanos más importantes ratificados por México?')"><div class="sc-tag">Tratados Internacionales</div><div class="sc-title">CADH · Pacto de San José · ONU</div><div class="sc-sub">OEA · OIT · Convenios internacionales</div></div>
+    <div class="src-card" onclick="enviar('¿Qué recursos ofrece el IIJ-UNAM para investigación jurídica en México?')"><div class="sc-tag">Doctrina</div><div class="sc-title">IIJ-UNAM · Revistas jurídicas</div><div class="sc-sub">Artículos · Tesis · Publicaciones</div></div>
+    <div class="src-card" onclick="enviar('Explícame la estructura normativa de Sinaloa: Constitución local, leyes y reglamentos municipales')"><div class="sc-tag">Legislación Local · Sinaloa</div><div class="sc-title">Normativa estatal de Sinaloa</div><div class="sc-sub">Constitución local · Leyes estatales</div></div>
+    <div class="slabel">Búsquedas recientes</div>
+    <div style="background:#fff;border:.5px solid #b8ccf0;border-radius:10px;padding:5px 11px;">
+      <div class="hist-item" onclick="enviar('Control de convencionalidad en Sinaloa, México')"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 00-9 9H1l4 4 4-4H6a7 7 0 117 7 7 7 0 01-6.32-4H4.61A9 9 0 1013 3z"/></svg>Control de convencionalidad en Sinaloa</div>
+      <div class="hist-item" onclick="enviar('Requisitos de procedibilidad en materia penal mexicana')"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 00-9 9H1l4 4 4-4H6a7 7 0 117 7 7 7 0 01-6.32-4H4.61A9 9 0 1013 3z"/></svg>Requisitos de procedibilidad vía penal</div>
+      <div class="hist-item" onclick="enviar('Paridad de género en candidaturas 2024 México')"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 00-9 9H1l4 4 4-4H6a7 7 0 117 7 7 7 0 01-6.32-4H4.61A9 9 0 1013 3z"/></svg>Paridad de género candidaturas 2024</div>
+    </div>
+  </div>
+</div>
+
+<!-- JURISPRUDENCIA -->
+<div class="screen" id="s-caselaw">
+  <div class="nav"><button class="nav-back" id="bk-caselaw">&#8592;</button><div class="nav-center"><div class="t">Jurisprudencia</div><div class="s">SCJN · TEPJF · TCC</div></div><div style="width:22px"></div></div>
+  <div class="body">
+    <div class="search-bar"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input type="text" placeholder="Ej: Paridad de género, amparo directo..."></div>
+    <div class="filter-row"><button class="fbtn af">Todos</button><button class="fbtn">SCJN</button><button class="fbtn">TEPJF</button><button class="fbtn">TCC</button></div>
+    <div class="slabel">Tesis y jurisprudencia reciente</div>
+    <div class="tc" onclick="enviar('Explícame la jurisprudencia del TEPJF sobre autoadscripción indígena en materia electoral')"><div class="th"><span class="ttag" style="background:#faeeda;color:#5a3000">TEPJF · Jurisprudencia</span><span class="tdate">12/2025</span></div><div class="ttitle">AUTOADSCRIPCIÓN INDÍGENA — Requisitos de acreditación electoral</div><div class="texc">No requiere prueba documental adicional cuando exista coherencia en la narrativa personal...</div></div>
+    <div class="tc" onclick="enviar('Explícame la tesis de la SCJN sobre el principio pro persona aplicado a derechos políticos')"><div class="th"><span class="ttag" style="background:#d4e2ff;color:#0c3a7c">SCJN · Tesis aislada</span><span class="tdate">10/2025</span></div><div class="ttitle">PRINCIPIO PRO PERSONA — Aplicación en derechos políticos y materia electoral</div><div class="texc">El intérprete debe aplicar la norma que otorgue mayor protección al derecho fundamental en juego...</div></div>
+    <div class="tc" onclick="enviar('Explícame la jurisprudencia del TEPJF sobre paridad de género en municipios con sistemas normativos indígenas')"><div class="th"><span class="ttag" style="background:#faeeda;color:#5a3000">TEPJF · Jurisprudencia</span><span class="tdate">09/2025</span></div><div class="ttitle">PARIDAD DE GÉNERO — Candidaturas en sistemas normativos internos</div><div class="texc">La paridad aplica incluso en municipios con usos y costumbres cuando exista disposición constitucional...</div></div>
+    <div class="tc" onclick="enviar('¿Cuál es el criterio de la SCJN sobre prisión preventiva justificada y los estándares de la CIDH?')"><div class="th"><span class="ttag" style="background:#d4e2ff;color:#0c3a7c">SCJN · Jurisprudencia</span><span class="tdate">08/2025</span></div><div class="ttitle">PRISIÓN PREVENTIVA JUSTIFICADA — Constitucionalidad y estándares CIDH</div><div class="texc">Debe aplicarse de forma excepcional y justificada, ponderando los estándares interamericanos...</div></div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-main"><div class="spin"></div><div class="ov-txt" id="ov-main-txt"></div></div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+var PHONE=document.getElementById('phone');
+var AREAS={
+  civil:          {name:'⚖️ Derecho Civil',          sub:'Contratos · Familia · Obligaciones',  nc:'#1a2a5e',ac:'#5b8dee',ctx:'derecho civil mexicano: contratos, familia, sucesiones, obligaciones, bienes y responsabilidad civil'},
+  electoral:      {name:'🗳️ Derecho Electoral',       sub:'TEPJF · INE · Candidaturas',          nc:'#3d2800',ac:'#d4a820',ctx:'derecho electoral mexicano: TEPJF, INE, candidaturas, paridad de género, juicio de inconformidad y medios de impugnación electoral'},
+  penal:          {name:'🔒 Derecho Penal',           sub:'CNPP · Juicios orales · Delitos',     nc:'#3a0a0a',ac:'#e05050',ctx:'derecho penal mexicano: CNPP, sistema acusatorio, juicios orales, teoría del delito, proceso penal y medidas cautelares'},
+  mercantil:      {name:'💼 Derecho Mercantil',       sub:'Sociedades · Títulos · Quiebras',     nc:'#0a2e1e',ac:'#20a870',ctx:'derecho mercantil mexicano: sociedades mercantiles, títulos de crédito, LGSM, concurso mercantil y contratos comerciales'},
+  amparo:         {name:'🏛️ Amparo',                  sub:'Directo · Indirecto · SCJN',          nc:'#18084a',ac:'#8878e0',ctx:'juicio de amparo mexicano: Ley de Amparo 2011, amparo directo e indirecto, suspensión del acto reclamado, conceptos de violación y suplencia de la queja'},
+  administrativo: {name:'📋 Derecho Administrativo', sub:'Actos admin · Recursos · TFJA',       nc:'#2a1500',ac:'#e09020',ctx:'derecho administrativo mexicano: actos administrativos, recursos administrativos, TFJA, LOAPF, contrataciones públicas y responsabilidad patrimonial del Estado'}
+};
+var currentArea='civil';
+var chatHistory=[];
+var DOCS=[];
+var PAGES={pdf:12,doc:8,docx:8,txt:4};
+var isWaiting=false;
+var SUGGESTIONS={
+  civil:         ['¿Qué es un contrato?','Elementos del acto jurídico','Tipos de nulidad'],
+  electoral:     ['¿Qué es el TEPJF?','Medios de impugnación electoral','Paridad de género'],
+  penal:         ['¿Qué es el CNPP?','Etapas del proceso oral','Prisión preventiva'],
+  mercantil:     ['Tipos de sociedades mercantiles','¿Qué es un pagaré?','Concurso mercantil'],
+  amparo:        ['¿Cuándo procede el amparo?','Diferencia directo e indirecto','¿Qué es la suplencia?'],
+  administrativo:['¿Qué es un acto administrativo?','Recursos administrativos','¿Qué es el TFJA?']
+};
+
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2400);}
+function goTo(a,b){document.getElementById(a).classList.remove('active');document.getElementById(b).classList.add('active');}
+
+function setArea(v){
+  var a=AREAS[v];if(!a)return;
+  currentArea=v;
+  PHONE.style.setProperty('--nc',a.nc);
+  PHONE.style.setProperty('--ac',a.ac);
+  document.getElementById('mat-name').textContent=a.name;
+  document.getElementById('mat-sub').textContent=a.sub;
+  var lbl=a.name.replace(/^[^\s]+\s/,'');
+  document.getElementById('nav-sub').textContent=lbl;
+  document.getElementById('chat-sub').textContent=lbl+' · activo';
+  document.getElementById('chat-pill').textContent=lbl;
+  document.querySelectorAll('.mo').forEach(function(el){
+    el.classList.remove('sel');
+    var ck=el.querySelector('.mo-ck');if(ck)ck.remove();
+    if(el.dataset.v===v){el.classList.add('sel');var d=document.createElement('div');d.className='mo-ck';d.textContent='✓';el.appendChild(d);}
+  });
+  var qas=document.querySelectorAll('.qa-btn');
+  var sg=SUGGESTIONS[v]||[];
+  qas.forEach(function(btn,i){if(sg[i])btn.textContent=sg[i];});
+}
+
+document.getElementById('mat-btn').addEventListener('click',function(){document.getElementById('mat-dd').classList.toggle('open');this.classList.toggle('open');});
+document.querySelectorAll('.mo').forEach(function(el){el.addEventListener('click',function(){setArea(this.dataset.v);document.getElementById('mat-dd').classList.remove('open');document.getElementById('mat-btn').classList.remove('open');});});
+document.getElementById('btn-chat').addEventListener('click',function(){goTo('s-index','s-chat');});
+document.getElementById('bk-chat').addEventListener('click',function(){goTo('s-chat','s-index');});
+document.getElementById('btn-docs').addEventListener('click',function(){goTo('s-index','s-docs');});
+document.getElementById('bk-docs').addEventListener('click',function(){goTo('s-docs','s-index');});
+document.getElementById('btn-research').addEventListener('click',function(){goTo('s-index','s-research');});
+document.getElementById('bk-research').addEventListener('click',function(){goTo('s-research','s-index');});
+document.getElementById('btn-caselaw').addEventListener('click',function(){goTo('s-index','s-caselaw');});
+document.getElementById('bk-caselaw').addEventListener('click',function(){goTo('s-caselaw','s-index');});
+document.querySelectorAll('.filter-row').forEach(function(row){row.querySelectorAll('.fbtn').forEach(function(b){b.addEventListener('click',function(){row.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('af');});this.classList.add('af');});});});
+
+function addMsg(txt,role,isError){
+  var cb=document.getElementById('chat-msgs');
+  var t=cb.querySelector('.typ-msg');if(t)t.remove();
+  var m=document.createElement('div');m.className='msg '+(role==='bot'?'bot':'user');
+  if(isError){m.innerHTML='<div class="ava">LT</div><div class="err-bubble">⚠️ '+txt+'</div>';}
+  else{m.innerHTML='<div class="ava">'+(role==='bot'?'LT':'TÚ')+'</div><div class="bubble">'+txt.replace(/\n/g,'<br>')+'</div>';}
+  cb.appendChild(m);cb.scrollTop=cb.scrollHeight;
+}
+function showTyping(){
+  var cb=document.getElementById('chat-msgs');
+  var d=document.createElement('div');d.className='msg bot typ-msg';
+  d.innerHTML='<div class="ava">LT</div><div class="typing"><span></span><span></span><span></span></div>';
+  cb.appendChild(d);cb.scrollTop=cb.scrollHeight;
+}
+function setLock(locked){
+  isWaiting=locked;
+  ['chat-inp','chat-send','hero-inp','hero-send'].forEach(function(id){var el=document.getElementById(id);if(el)el.disabled=locked;});
+}
+
+async function askAI(userText){
+  if(isWaiting||!userText.trim())return;
+  var a=AREAS[currentArea];
+  chatHistory.push({role:'user',content:userText});
+  setLock(true);showTyping();
+  var sys='Eres LexTutor, un asistente jurídico mexicano profesional y confiable, especializado en '+a.ctx+'. Responde en español de forma clara, precisa y útil, en máximo 5 oraciones. Cita artículos o leyes relevantes cuando corresponda. Escribe texto plano sin markdown ni asteriscos. Si no sabes algo, dilo con honestidad.';
+  try{
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:chatHistory})
+    });
+    var data=await resp.json();
+    if(data.content&&data.content[0]&&data.content[0].text){
+      var reply=data.content[0].text;
+      chatHistory.push({role:'assistant',content:reply});
+      addMsg(reply,'bot');
+    }else{throw new Error(data.error?data.error.message:'Sin respuesta de la IA');}
+  }catch(e){
+    chatHistory.pop();
+    addMsg(e.message&&e.message.length<140?e.message:'Error de conexión. Intenta de nuevo.','bot',true);
+  }
+  setLock(false);document.getElementById('chat-inp').focus();
+}
+
+function enviar(txt){
+  txt=(txt||'').trim();if(!txt||isWaiting)return;
+  goTo('s-index','s-chat');
+  addMsg(txt,'user');
+  document.getElementById('hero-inp').value='';
+  document.getElementById('chat-inp').value='';
+  askAI(txt);
+}
+function enviarQA(btn){enviar(btn.textContent);}
+
+document.getElementById('hero-send').addEventListener('click',function(){enviar(document.getElementById('hero-inp').value);});
+document.getElementById('hero-inp').addEventListener('keydown',function(e){if(e.key==='Enter')enviar(this.value);});
+document.getElementById('chat-send').addEventListener('click',function(){enviar(document.getElementById('chat-inp').value);});
+document.getElementById('chat-inp').addEventListener('keydown',function(e){if(e.key==='Enter')enviar(this.value);});
+
+function fmtSz(b){return b<1048576?Math.round(b/1024)+' KB':(b/1048576).toFixed(1)+' MB';}
+function updateDocs(){
+  var tot=DOCS.length,pdfs=DOCS.filter(function(d){return d.ext==='pdf';}).length,pgs=DOCS.reduce(function(a,d){return a+(PAGES[d.ext]||6);},0);
+  document.getElementById('st-total').textContent=tot;
+  document.getElementById('st-pdf').textContent=pdfs;
+  document.getElementById('st-pags').textContent=pgs;
+  document.getElementById('docs-nav-sub').textContent=tot+' archivo'+(tot!==1?'s':'');
+  document.getElementById('tc-docs-sub').textContent=tot>0?tot+' doc'+(tot!==1?'s':''):'Analizar archivos';
+  document.getElementById('empty-st').style.display=tot===0?'block':'none';
+  document.getElementById('docs-lbl').style.display=tot===0?'none':'block';
+  ['ab1','ab2','ab3','ab4'].forEach(function(id){var el=document.getElementById(id);if(tot>0)el.classList.remove('off');else el.classList.add('off');});
+}
+function renderDoc(doc){
+  var list=document.getElementById('doc-list'),card=document.createElement('div');
+  card.className='doc-card';card.id='dc-'+doc.id;
+  card.innerHTML='<div class="doc-thumb"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 2l5 5h-5V4z"/></svg><span class="doc-ext">'+doc.ext+'</span></div>'
+    +'<div class="doc-info"><div class="doc-name">'+doc.name+'</div><div class="doc-meta">'+fmtSz(doc.size)+' · ~'+(PAGES[doc.ext]||6)+' págs. · '+doc.time+'</div><div class="doc-pbar"><div class="doc-pfill" style="width:0%" id="pf-'+doc.id+'"></div></div></div>'
+    +'<div class="doc-acts"><button class="dact" onclick="anaDoc(\''+doc.id+'\')">Analizar</button><button class="dact del" onclick="delDoc(\''+doc.id+'\')">✕</button></div>';
+  list.appendChild(card);
+  setTimeout(function(){var pf=document.getElementById('pf-'+doc.id);if(pf)pf.style.width='100%';},80);
+}
+function delDoc(id){DOCS=DOCS.filter(function(d){return d.id!==id;});var c=document.getElementById('dc-'+id);if(c)c.remove();updateDocs();toast('Documento eliminado');}
+function anaDoc(id){
+  var d=DOCS.find(function(x){return x.id===id;});if(!d)return;
+  var ov=document.getElementById('ov-docs');document.getElementById('ov-docs-txt').textContent='Analizando '+d.name+'...';
+  ov.classList.add('show');
+  setTimeout(function(){ov.classList.remove('show');goTo('s-docs','s-chat');
+    enviar('Analiza jurídicamente el documento "'+d.name+'". Identifica: tipo de documento, partes involucradas, puntos principales, posibles riesgos legales y recomendaciones desde el derecho mexicano.');
+  },1200);
+}
+function runAn(tipo,msg){
+  if(DOCS.length===0){toast('⚠️ Primero carga un documento');return;}
+  var ov=document.getElementById('ov-docs');document.getElementById('ov-docs-txt').textContent=msg;
+  ov.classList.add('show');
+  var nombres=DOCS.map(function(d){return d.name;}).join(', ');
+  setTimeout(function(){ov.classList.remove('show');goTo('s-docs','s-chat');
+    enviar('Tengo estos documentos legales: '+nombres+'. Realiza un análisis de '+tipo+' desde la perspectiva del derecho mexicano.');
+  },1200);
+}
+document.getElementById('file-inp').addEventListener('change',function(){handleFiles(this.files);this.value='';});
+var uz=document.getElementById('upload-zone');
+uz.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('drag-over');});
+uz.addEventListener('dragleave',function(){this.classList.remove('drag-over');});
+uz.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('drag-over');handleFiles(e.dataTransfer.files);});
+function handleFiles(files){
+  var added=0;
+  Array.from(files).forEach(function(f){
+    var ext=f.name.split('.').pop().toLowerCase();
+    if(!['pdf','doc','docx','txt'].includes(ext))return;
+    var doc={id:'d'+Date.now()+'_'+Math.random().toString(36).slice(2,5),name:f.name,size:f.size,ext:ext,time:'Ahora mismo'};
+    DOCS.push(doc);renderDoc(doc);added++;
+  });
+  if(added>0){updateDocs();toast('✓ '+added+' archivo'+(added!==1?'s':'')+' cargado'+(added!==1?'s':''));}
+  else toast('⚠️ Solo PDF, DOC, DOCX o TXT');
+}
+
+function setupSpeech(micEl,inputEl,statusEl){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){micEl.addEventListener('click',function(){if(statusEl){statusEl.textContent='⚠️ Sin soporte de voz';setTimeout(function(){statusEl.textContent='';},2400);}});return;}
+  var rec=new SR();rec.lang='es-MX';rec.interimResults=true;var on=false;
+  rec.onstart=function(){on=true;micEl.classList.add('listening');if(statusEl)statusEl.textContent='🎙️ Escuchando...';};
+  rec.onresult=function(e){inputEl.value=Array.from(e.results).map(function(r){return r[0].transcript;}).join('');if(statusEl&&e.results[e.results.length-1].isFinal)statusEl.textContent='✓ Capturado — presiona enviar';};
+  rec.onerror=function(e){micEl.classList.remove('listening');on=false;if(statusEl){statusEl.textContent='❌ '+(e.error==='not-allowed'?'Permite el micrófono':'Error de voz');setTimeout(function(){statusEl.textContent='';},2400);}};
+  rec.onend=function(){on=false;micEl.classList.remove('listening');if(statusEl)setTimeout(function(){statusEl.textContent='';},1500);};
+  micEl.addEventListener('click',function(){if(on)rec.stop();else try{rec.start();}catch(e){}});
+}
+setupSpeech(document.getElementById('hero-mic'),document.getElementById('hero-inp'),document.getElementById('hero-st'));
+setupSpeech(document.getElementById('chat-mic'),document.getElementById('chat-inp'),null);
+updateDocs();
+</script>
+</body>
+</html>
